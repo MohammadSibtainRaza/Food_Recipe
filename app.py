@@ -26,10 +26,15 @@ def classify_food(image, model, processor):
 def generate_recipe_gemini(food_item):
     if food_item == "Unknown":
         return "Could not classify the food item. Please try another image."
+    
     prompt = f"Generate a detailed recipe for {food_item}. Include ingredients, preparation time, cooking instructions, and serving suggestions."
-    model = genai.GenerativeModel("gemini-pro")
-    response = model.generate_content(prompt)
-    return response.text
+    
+    try:
+        model = genai.GenerativeModel("gemini-1.5-flash-latest")  # Using a free model
+        response = model.generate_content(prompt)
+        return response.text
+    except Exception as e:
+        return f"Error generating recipe: {str(e)}"
 
 # Streamlit UI
 st.title("Food Image to Recipe Generator")
